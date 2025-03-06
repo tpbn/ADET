@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Lab 4 - CSS Page</h1>
+        <h1>Lab 5 - Subjects Taken</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -18,45 +18,17 @@
             </ul>
         </nav>
     </header>
-    
-    <section id="content">
-        <h2>Welcome to Lab 4</h2>
-        <p>This page is Lab 4 integrated with CSS</p>
-    </section>
-    
-    <section id="about">
-        <h2>About</h2>
-        <p>Contains information about lab 4</p>
-    </section>
-    
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>For contacts here.</p>
-    </section>
 
     <section id="subjects">
         <h2>Subjects Taken</h2>
-        <div id="subjects-container"></div>
+        <input type="text" id="searchBox" placeholder="Search a subject..." onkeyup="filterSubjects()">
+        <ul id="subjectList"></ul>
     </section>
 
     <footer>
         <p>Trisha May Pabillaran</p>
     </footer>
 
-    <script>
-        fetch('https://tpbn.github.io/ADET/courses.json')
-        .then(response => response.json())
-        .then(data => {
-            let subjectsContainer = document.getElementById("subjects-container");
-            data.subjects.forEach(entry => {
-                let div = document.createElement("div");
-                div.innerHTML = `<h3>${entry.year} - ${entry.semester}</h3>
-                                 <ul>${entry.courses.map(course => `<li>${course}</li>`).join('')}</ul>`;
-                subjectsContainer.appendChild(div);
-            });
-        })
-        .catch(error => console.error('Error loading JSON:', error));
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
