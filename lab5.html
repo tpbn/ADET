@@ -6,8 +6,6 @@
     <title>Lab 5 - Subjects Taken</title>
     <link rel="stylesheet" href="lab4.css">
     <script src="script.js" defer></script>
-
-
 </head>
 <body>
     <header>
@@ -32,7 +30,12 @@
         <p>Trisha May Pabillaran</p>
     </footer>
 
-    <script src="./script.js"></script>
+    <script>
+        fetch('https://tpbn.github.io/ADET/courses.json')
+            .then(response => response.json())
+            .then(data => console.log("JSON Loaded:", data))
+            .catch(error => console.error("Fetch Error:", error));
+    </script>
 
 </body>
 </html>

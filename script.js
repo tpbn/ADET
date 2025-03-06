@@ -1,30 +1,38 @@
 document.addEventListener("DOMContentLoaded", function () {
     let subjects = [];
 
-    // get the courses from json file
-    fetch('./courses.json')
-        .then(response => response.json())
+    // Fetch courses from GitHub JSON file
+    fetch('https://raw.githubusercontent.com/tpbn/ADET/main/courses.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok " + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
-            subjects = data.subjects;
+            subjects = data.courses; // Ensure it uses "courses" instead of "subjects"
             displaySubjects(subjects);
         })
         .catch(error => console.error('Error fetching JSON:', error));
 
-    // display the courses
+    // Display the courses
     function displaySubjects(subjectsArray) {
         const subjectList = document.getElementById('subjectList');
-        subjectList.innerHTML = "";
+        subjectList.innerHTML = ""; // Clear previous data
         subjectsArray.forEach(subject => {
             let li = document.createElement('li');
-            li.textContent = subject;
+            li.textContent = `${subject.code}: ${subject.description} (${subject.credit} credits)`;
             subjectList.appendChild(li);
         });
     }
 
-    // filter coursese
+    // Filter courses
     window.filterSubjects = function () {
         const searchText = document.getElementById('searchBox').value.toLowerCase();
-        const filteredSubjects = subjects.filter(subject => subject.toLowerCase().includes(searchText));
+        const filteredSubjects = subjects.filter(subject => 
+            subject.code.toLowerCase().includes(searchText) || 
+            subject.description.toLowerCase().includes(searchText)
+        );
         displaySubjects(filteredSubjects);
     };
 });
