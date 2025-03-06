@@ -1,46 +1,51 @@
 document.addEventListener("DOMContentLoaded", function () {
     let subjects = [];
 
-    // Fetch courses from GitHub JSON file
-    fetch('https://raw.githubusercontent.com/tpbn/ADET/main/courses.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok " + response.statusText);
-            }
-            return response.json();
-        })
+    // Get the list element
+    const subjectList = document.getElementById('subjectList');
+
+    // Hide the list initially
+    subjectList.style.display = 'none';
+
+    // Fetch courses from JSON file
+    fetch('./courses.json')
+        .then(response => response.json())
         .then(data => {
-            subjects = data.courses;
-            document.getElementById('subjectList').style.display = 'none'; // Hide list if not used
+            subjects = data.subjects; // Assuming "subjects" is the key in the JSON file
         })
         .catch(error => console.error('Error fetching JSON:', error));
 
     // Display the courses
     function displaySubjects(subjectsArray) {
-        const subjectList = document.getElementById('subjectList');
-        subjectList.innerHTML = ""; // Clear previous data
+        subjectList.innerHTML = ""; // Clear previous results
 
         if (subjectsArray.length === 0) {
-            subjectList.style.display = 'none'; // Hide list if no results
+            subjectList.style.display = 'none'; // Hide the list if no matches
             return;
         }
 
         subjectsArray.forEach(subject => {
             let li = document.createElement('li');
-            li.textContent = `${subject.code}: ${subject.description} (${subject.credit} credits)`;
+            li.textContent = subject;
             subjectList.appendChild(li);
         });
 
-        subjectList.style.display = 'block'; // Show list only when inly searched
+        subjectList.style.display = 'block'; // Show the list when there are results
     }
 
-    // Filter courses
+    // Filter subjects
     window.filterSubjects = function () {
-        const searchText = document.getElementById('searchBox').value.toLowerCase();
+        const searchText = document.getElementById('searchBox').value.toLowerCase().trim();
+
+        if (searchText === "") {
+            subjectList.style.display = 'none'; // Hide the list if input is empty
+            return;
+        }
+
         const filteredSubjects = subjects.filter(subject => 
-            subject.code.toLowerCase().includes(searchText) || 
-            subject.description.toLowerCase().includes(searchText)
+            subject.toLowerCase().includes(searchText)
         );
+
         displaySubjects(filteredSubjects);
     };
 });
