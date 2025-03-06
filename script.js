@@ -1,59 +1,36 @@
 document.addEventListener("DOMContentLoaded", function () {
     let subjects = [];
 
-    // Get the subject list and search box elements
-    const subjectList = document.getElementById('subjectList');
-    const searchBox = document.getElementById('searchBox');
-
-    // Initially hide the subject list
-    subjectList.style.display = 'none';
-
-    // Fetch courses from JSON file
-    fetch('./courses.json')
+    // Fetch courses from GitHub JSON file
+    fetch('https://raw.githubusercontent.com/tpbn/ADET/main/courses.json')
         .then(response => response.json())
         .then(data => {
-            subjects = data.subjects || []; // Ensure subjects exist
+            subjects = data.courses.map(course => `${course.code}: ${course.description} (${course.credit} credits)`);
+            displaySubjects([]); // Start with an empty list
         })
         .catch(error => console.error('Error fetching JSON:', error));
 
-    // Function to display subjects based on search
+    // Display subjects (hidden by default)
     function displaySubjects(subjectsArray) {
-        subjectList.innerHTML = ""; // Clear previous results
+        const subjectList = document.getElementById('subjectList');
+        subjectList.innerHTML = "";
 
         if (subjectsArray.length === 0) {
-            subjectList.style.display = 'none'; // Hide the list if no matches
-            return;
+            subjectList.style.display = "none"; // Hide list if empty
+        } else {
+            subjectList.style.display = "block"; // Show list if there are results
+            subjectsArray.forEach(subject => {
+                let li = document.createElement('li');
+                li.textContent = subject;
+                subjectList.appendChild(li);
+            });
         }
-
-        subjectsArray.forEach(subject => {
-            let li = document.createElement('li');
-            li.textContent = subject;
-            subjectList.appendChild(li);
-        });
-
-        subjectList.style.display = 'block'; // Show list when results exist
     }
 
-    // Filter subjects when typing in the search box
+    // Filter subjects on search
     window.filterSubjects = function () {
-        const searchText = searchBox.value.toLowerCase().trim();
-
-        if (searchText === "") {
-            subjectList.style.display = 'none'; // Hide if input is empty
-            return;
-        }
-
-        const filteredSubjects = subjects.filter(subject =>
-            subject.toLowerCase().includes(searchText)
-        );
-
+        const searchText = document.getElementById('searchBox').value.toLowerCase();
+        const filteredSubjects = subjects.filter(subject => subject.toLowerCase().includes(searchText));
         displaySubjects(filteredSubjects);
     };
-
-    // Hide the list if the search box is cleared
-    searchBox.addEventListener('input', function () {
-        if (searchBox.value.trim() === "") {
-            subjectList.style.display = 'none';
-        }
-    });
 });
