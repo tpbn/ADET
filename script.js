@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return response.json();
         })
         .then(data => {
-            subjects = data.courses; // Ensure it uses "courses" instead of "subjects"
-            displaySubjects(subjects);
+            subjects = data.courses;
+            document.getElementById('subjectList').style.display = 'none'; // Hide list if not used
         })
         .catch(error => console.error('Error fetching JSON:', error));
 
@@ -19,11 +19,19 @@ document.addEventListener("DOMContentLoaded", function () {
     function displaySubjects(subjectsArray) {
         const subjectList = document.getElementById('subjectList');
         subjectList.innerHTML = ""; // Clear previous data
+
+        if (subjectsArray.length === 0) {
+            subjectList.style.display = 'none'; // Hide list if no results
+            return;
+        }
+
         subjectsArray.forEach(subject => {
             let li = document.createElement('li');
             li.textContent = `${subject.code}: ${subject.description} (${subject.credit} credits)`;
             subjectList.appendChild(li);
         });
+
+        subjectList.style.display = 'block'; // Show list only when inly searched
     }
 
     // Filter courses
