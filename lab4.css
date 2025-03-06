@@ -45,6 +45,34 @@ section {
     background: white;
     border-radius: 8px;
 }
+/* new additional feature */
+#searchBox {
+    width: 60%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+#subjectList {
+    list-style: none;
+    padding: 0;
+}
+
+.subject-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.subject-item:hover {
+    background-color: #ddd;
+}
+
 
 footer {
     text-align: center;
